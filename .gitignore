@@ -8,3 +8,27 @@
 .idea/TP2-POD-Peatones.iml
 
 api/api.iml
+
+server/target/classes/log4j.xml
+
+server/target/classes/Server.class
+
+client/target/classes/Client.class
+
+client/target/classes/log4j.xml
+
+.idea/libraries/Maven__com_hazelcast_hazelcast_3_7_8.xml
+
+.idea/libraries/Maven__com_hazelcast_hazelcast_all_3_7_8.xml
+
+.idea/libraries/Maven__com_hazelcast_hazelcast_client_tests_3_7_8.xml
+
+.idea/libraries/Maven__com_hazelcast_hazelcast_tests_3_7_8.xml
+
+.idea/libraries/Maven__log4j_log4j_1_2_17.xml
+
+.idea/libraries/Maven__org_slf4j_jcl_over_slf4j_1_7_12.xml
+
+.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_12.xml
+
+.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_12.xml

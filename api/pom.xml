@@ -11,9 +11,11 @@
 
     <artifactId>tpe2-g13-api</artifactId>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
+   <dependencies>
+       <dependency>
+           <groupId>com.hazelcast</groupId>
+           <artifactId>hazelcast-all</artifactId>
+       </dependency>
+   </dependencies>
 
 </project>

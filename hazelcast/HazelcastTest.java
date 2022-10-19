@@ -8,7 +8,7 @@ public class HazelcastTest {
        hazelcastFactory = new TestHazelcastFactory();
 
        // Group Config
-       GroupConfig groupConfig = new GroupConfig().setName("gX").setPassword("gX-pass");
+       GroupConfig groupConfig = new GroupConfig().setName("g13").setPassword("g13-pass");
 
        // Config
        Config config = new Config().setGroupConfig(groupConfig);

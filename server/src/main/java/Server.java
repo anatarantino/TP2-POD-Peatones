@@ -1,5 +1,10 @@
 
-import java.util.logging.Logger;
+import com.hazelcast.config.*;
+import com.hazelcast.core.Hazelcast;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Collections;
 
 public class Server {
 
@@ -10,9 +15,10 @@ public class Server {
 
        // Config
        Config config = new Config();
+       String address = "127.0.0.1";
 
        // Group Config
-       GroupConfig groupConfig = new GroupConfig().setName("g0").setPassword("g0-pass");
+       GroupConfig groupConfig = new GroupConfig().setName("g13").setPassword("g13-pass");
        config.setGroupConfig(groupConfig);
 
        // Network Config
@@ -21,7 +27,7 @@ public class Server {
        JoinConfig joinConfig = new JoinConfig().setMulticastConfig(multicastConfig);
 
        InterfacesConfig interfacesConfig = new InterfacesConfig()
-               .setInterfaces(Collections.singletonList("192.168.1.*")).setEnabled(true);
+               .setInterfaces(Collections.singletonList(address)).setEnabled(true);
 
        NetworkConfig networkConfig = new NetworkConfig().setInterfaces(interfacesConfig).setJoin(joinConfig);
 
