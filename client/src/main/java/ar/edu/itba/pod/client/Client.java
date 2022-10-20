@@ -1,14 +1,12 @@
+package ar.edu.itba.pod.client;
+
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.config.GroupConfig;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
-import entities.Sensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -20,7 +18,7 @@ public class Client {
    private static final String ADDRESS_SEPARATOR = ";";
 
    public static void main(String[] args) {
-       logger.info("hz-config Client Starting ...");
+       logger.info("hz-config ar.edu.itba.pod.client.Client Starting ...");
 
        final Properties properties = System.getProperties();
        final List<String> serverAddresses;
@@ -58,14 +56,14 @@ public class Client {
            return;
        }
 
-       // Client Config
+       // ar.edu.itba.pod.client.Client Config
        ClientConfig clientConfig = new ClientConfig();
 
        // Group Config
        GroupConfig groupConfig = new GroupConfig().setName("g13").setPassword("g13-pass");
        clientConfig.setGroupConfig(groupConfig);
 
-       // Client Network Config
+       // ar.edu.itba.pod.client.Client Network Config
        ClientNetworkConfig clientNetworkConfig = new ClientNetworkConfig();
 //       String[] addresses = {"192.168.1.51:5701"};
        //todo add all addresses check how to do it

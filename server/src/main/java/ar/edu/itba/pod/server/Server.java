@@ -1,3 +1,4 @@
+package ar.edu.itba.pod.server;
 
 import com.hazelcast.config.*;
 import com.hazelcast.core.Hazelcast;
@@ -11,7 +12,7 @@ public class Server {
    private static final Logger logger = LoggerFactory.getLogger(Server.class);
 
    public static void main(String[] args) {
-       logger.info("hz-config Server Starting ...");
+       logger.info("hz-config ar.edu.itba.pod.server.Server Starting ...");
 
        // Config
        Config config = new Config();

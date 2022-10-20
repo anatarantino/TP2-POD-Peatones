@@ -11,9 +11,9 @@ api/api.iml
 
 server/target/classes/log4j.xml
 
-server/target/classes/Server.class
+server/target/classes/ar.edu.itba.pod.server.Server.class
 
-client/target/classes/Client.class
+client/target/classes/ar.edu.itba.pod.client.Client.class
 
 client/target/classes/log4j.xml
 
@@ -57,9 +57,9 @@ api/target/tpe2-g13-api-1.0-SNAPSHOT.jar
 
 client/target/classes/sensors.csv
 
-client/target/classes/Utils.class
+client/target/classes/ar.edu.itba.pod.client.Utils.class
 
-client/target/classes/Utils$ServerAddress.class
+client/target/classes/ar.edu.itba.pod.client.Utils$ServerAddress.class
 
 client/target/maven-archiver/pom.properties
 
@@ -126,3 +126,21 @@ client/target/tpe2-g13-client-1.0-SNAPSHOT/lib/jars/tpe2-g13-client-1.0-SNAPSHOT
 client/target/tpe2-g13-client-1.0-SNAPSHOT/query1.sh
 
 api/target/tpe2-g13-api-1.0-SNAPSHOT-sources.jar
+
+server/target/classes/ar/edu/itba/pod/Server.class
+
+server/target/classes/ar/edu/itba/pod/server/Server.class
+
+client/target/classes/ar/edu/itba/pod/Client.class
+
+client/target/classes/ar/edu/itba/pod/client/Client.class
+
+client/target/classes/ar/edu/itba/pod/client/Utils.class
+
+client/target/classes/ar/edu/itba/pod/client/Utils$ServerAddress.class
+
+client/target/classes/ar/edu/itba/pod/Utils.class
+
+client/target/classes/ar/edu/itba/pod/Utils$ServerAddress.class
+
+.idea/uiDesigner.xml

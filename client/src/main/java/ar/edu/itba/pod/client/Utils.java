@@ -1,3 +1,5 @@
+package ar.edu.itba.pod.client;
+
 import entities.Sensor;
 
 import java.io.IOException;
