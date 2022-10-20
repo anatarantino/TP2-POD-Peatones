@@ -17,7 +17,7 @@ public class FileUtils {
         return Files.lines(path, StandardCharsets.UTF_8)
                 .skip(1)
                 .map(line -> Arrays.asList(line.split(delimiter)))
-                .map(lines -> new Sensor(Integer.parseInt(lines.get(StatusFields.SENSOR_ID.value)),lines.get(StatusFields.SENSOR_DESC.value), Status.valueOf(lines.get(StatusFields.SENSOR_DESC.value))));
+                .map(lines -> new Sensor(Integer.parseInt(lines.get(StatusFields.SENSOR_ID.value)),lines.get(StatusFields.SENSOR_DESC.value), Status.getStatusByName(lines.get(StatusFields.SENSOR_STATUS.value))));
     }
 
     public static Stream<Reading> getReadingsStream(final Path path, final String delimiter) throws IOException {

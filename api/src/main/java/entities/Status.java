@@ -11,6 +11,15 @@ public enum Status {
         this.statusName = statusName;
     }
 
+    public static Status getStatusByName(String name){
+        for(Status status : Status.values()){
+            if(status.getStatusName().equals(name)){
+                return status;
+            }
+        }
+        throw new IllegalArgumentException();
+    }
+
     public String getStatusName() {
         return statusName;
     }

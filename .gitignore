@@ -150,3 +150,11 @@ client/target/classes/inFiles/readings.csv
 client/target/classes/inFiles/sensors.csv
 
 client/src/main/resources/inFiles/sensors.csv
+
+client/src/main/resources/inFiles/readings.csv
+
+client/target/classes/ar/edu/itba/pod/client/queries/Query1.class
+
+client/target/classes/ar/edu/itba/pod/client/queries/QueryUtils.class
+
+client/target/classes/inFiles/readings.csv.crdownload

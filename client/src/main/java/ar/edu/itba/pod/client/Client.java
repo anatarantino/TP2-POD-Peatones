@@ -59,7 +59,7 @@ public class  Client {
        }
 
        final File sensorFile = Paths.get(inPath + "/sensors.csv").toFile();
-       final File readingsFile = Paths.get(inPath + "readings.csv.csv").toFile();
+       final File readingsFile = Paths.get(inPath + "/readings.csv").toFile();
 
        String outPath;
        try {

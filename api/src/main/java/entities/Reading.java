@@ -1,6 +1,8 @@
 package entities;
 
-public class Reading {
+import java.io.Serializable;
+
+public class Reading implements Serializable {
     private int sensorId;
     private int year;
     private String month;
