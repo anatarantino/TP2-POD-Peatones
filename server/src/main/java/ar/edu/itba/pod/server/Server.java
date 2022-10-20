@@ -16,7 +16,7 @@ public class Server {
 
        // Config
        Config config = new Config();
-       String address = "127.0.0.1";
+       String address = "127.0.0.*";
 
        // Group Config
        GroupConfig groupConfig = new GroupConfig().setName("g13").setPassword("g13-pass");

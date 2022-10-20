@@ -144,3 +144,9 @@ client/target/classes/ar/edu/itba/pod/Utils.class
 client/target/classes/ar/edu/itba/pod/Utils$ServerAddress.class
 
 .idea/uiDesigner.xml
+
+client/target/classes/inFiles/readings.csv
+
+client/target/classes/inFiles/sensors.csv
+
+client/src/main/resources/inFiles/sensors.csv

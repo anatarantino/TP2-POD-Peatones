@@ -1,23 +1,34 @@
 package ar.edu.itba.pod.client;
 
+import ar.edu.itba.pod.client.queries.Query1;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.config.GroupConfig;
+import com.hazelcast.core.HazelcastInstance;
+import entities.Reading;
+import entities.Sensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.stream.Stream;
 
-public class Client {
+import static utils.FileUtils.getReadingsStream;
+import static utils.FileUtils.getSensorStream;
+
+public class  Client {
 
    private static final Logger logger = LoggerFactory.getLogger(Client.class);
    private static final String CSV_DELIMITER = ";";
    private static final String ADDRESS_SEPARATOR = ";";
 
-   public static void main(String[] args) {
+   public static void main(String[] args) throws IOException {
        logger.info("hz-config ar.edu.itba.pod.client.Client Starting ...");
 
        final Properties properties = System.getProperties();
@@ -30,7 +41,6 @@ public class Client {
            return;
        }
        serverAddresses = Utils.parseAddresses(propertyAddresses, ADDRESS_SEPARATOR);
-       serverAddresses.forEach(System.out::println);
 
        Integer queryNumber;
        try {
@@ -48,6 +58,9 @@ public class Client {
            return;
        }
 
+       final File sensorFile = Paths.get(inPath + "/sensors.csv").toFile();
+       final File readingsFile = Paths.get(inPath + "readings.csv.csv").toFile();
+
        String outPath;
        try {
            outPath = Optional.ofNullable(properties.getProperty("inPath")).orElseThrow(IllegalArgumentException::new);
@@ -55,31 +68,27 @@ public class Client {
            logger.error("Invalid inPath");
            return;
        }
+       final File outQueryFile = new File(outPath + "/query" + queryNumber + ".csv");
+       final File outTimeFile = new File(outPath + "/time" + queryNumber + ".txt");
 
-       // ar.edu.itba.pod.client.Client Config
        ClientConfig clientConfig = new ClientConfig();
 
        // Group Config
        GroupConfig groupConfig = new GroupConfig().setName("g13").setPassword("g13-pass");
        clientConfig.setGroupConfig(groupConfig);
-
-       // ar.edu.itba.pod.client.Client Network Config
        ClientNetworkConfig clientNetworkConfig = new ClientNetworkConfig();
-//       String[] addresses = {"192.168.1.51:5701"};
-       //todo add all addresses check how to do it
-//       clientNetworkConfig.addAddress(serverAddresses.get(0));
+
+       clientNetworkConfig.setAddresses(serverAddresses);
        clientConfig.setNetworkConfig(clientNetworkConfig);
 
-       //todo DESCOMENTAME!!!!
-//       HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
+       HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
 
-       System.out.println(inPath);
-
-
-//       final Stream<Sensor> sensorStream = getSensorStream();
+       final Stream<Sensor> sensorStream = getSensorStream(sensorFile.toPath(), CSV_DELIMITER);
+       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
 
        switch(queryNumber){
            case 1:
+               Query1.run(hazelcastInstance, readingStream,sensorStream, outQueryFile);
                break;
            case 2:
                break;
