@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class TotalReadingsCollator implements Collator<Map.Entry<Integer,Long>, Collection<Pair<Integer,Long>>> {
+public class TotalPedestriansCollator implements Collator<Map.Entry<String,Long>, Collection<Pair<String,Long>>> {
     @Override
-    public Collection<Pair<Integer, Long>> collate(Iterable<Map.Entry<Integer, Long>> values) {
+    public Collection<Pair<String, Long>> collate(Iterable<Map.Entry<String, Long>> values) {
         return StreamSupport.stream(values.spliterator(),false).sorted(
                 (o1,o2) -> {
                     int aux = o2.getValue().compareTo(o1.getValue());

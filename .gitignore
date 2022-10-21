@@ -186,3 +186,19 @@ api/target/classes/ar/edu/itba/pod/utils/FileUtils$StatusFields.class
 api/target/classes/ar/edu/itba/pod/utils/Pair.class
 
 api/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+
+client/src/main/resources/outFiles/query1.csv
+
+client/target/classes/outFiles/query1.csv
+
+api/target/classes/ar/edu/itba/pod/collators/TotalPedestriansCollator.class
+
+api/target/classes/ar/edu/itba/pod/mappers/TotalPedestriansMapper.class
+
+api/target/classes/ar/edu/itba/pod/reducers/TotalPedestriansReducer.class
+
+api/target/classes/ar/edu/itba/pod/reducers/TotalPedestriansReducer$1.class
+
+api/target/classes/ar/edu/itba/pod/reducers/TotalPedestriansReducer$TotalReadingReducer.class
+
+api/target/classes/ar/edu/itba/pod/utils/FileUtils$SensorFields.class
