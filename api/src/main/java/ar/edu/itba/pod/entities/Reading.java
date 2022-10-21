@@ -1,4 +1,4 @@
-package entities;
+package ar.edu.itba.pod.entities;
 
 import java.io.Serializable;
 

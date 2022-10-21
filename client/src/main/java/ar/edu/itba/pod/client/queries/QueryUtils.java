@@ -2,8 +2,8 @@ package ar.edu.itba.pod.client.queries;
 
 import com.hazelcast.core.ISet;
 import com.hazelcast.core.MultiMap;
-import entities.Reading;
-import entities.Sensor;
+import ar.edu.itba.pod.entities.Reading;
+import ar.edu.itba.pod.entities.Sensor;
 
 import java.util.stream.Stream;
 

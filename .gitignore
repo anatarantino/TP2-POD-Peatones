@@ -33,17 +33,17 @@ client/target/classes/log4j.xml
 
 .idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_12.xml
 
-api/target/classes/entities/Reading.class
+api/target/classes/ar.edu.itba.pod.entities/Reading.class
 
-api/target/classes/entities/Sensor.class
+api/target/classes/ar.edu.itba.pod.entities/Sensor.class
 
-api/target/classes/entities/Status.class
+api/target/classes/ar.edu.itba.pod.entities/Status.class
 
-api/target/classes/utils/FileUtils.class
+api/target/classes/ar.edu.itba.pod.utils/FileUtils.class
 
-api/target/classes/utils/FileUtils$ReadingsFields.class
+api/target/classes/ar.edu.itba.pod.utils/FileUtils$ReadingsFields.class
 
-api/target/classes/utils/FileUtils$StatusFields.class
+api/target/classes/ar.edu.itba.pod.utils/FileUtils$StatusFields.class
 
 api/target/maven-archiver/pom.properties
 
@@ -158,3 +158,31 @@ client/target/classes/ar/edu/itba/pod/client/queries/Query1.class
 client/target/classes/ar/edu/itba/pod/client/queries/QueryUtils.class
 
 client/target/classes/inFiles/readings.csv.crdownload
+
+api/target/classes/ar/edu/itba/pod/collators/TotalReadingsCollator.class
+
+api/target/classes/ar/edu/itba/pod/entities/Reading.class
+
+api/target/classes/ar/edu/itba/pod/entities/Sensor.class
+
+api/target/classes/ar/edu/itba/pod/entities/Status.class
+
+api/target/classes/ar/edu/itba/pod/mappers/TotalReadingsMapper.class
+
+api/target/classes/ar/edu/itba/pod/predicates/SensorCountPredicate.class
+
+api/target/classes/ar/edu/itba/pod/reducers/TotalReadingsReducer.class
+
+api/target/classes/ar/edu/itba/pod/reducers/TotalReadingsReducer$1.class
+
+api/target/classes/ar/edu/itba/pod/reducers/TotalReadingsReducer$TotalReadingReducer.class
+
+api/target/classes/ar/edu/itba/pod/utils/FileUtils.class
+
+api/target/classes/ar/edu/itba/pod/utils/FileUtils$ReadingsFields.class
+
+api/target/classes/ar/edu/itba/pod/utils/FileUtils$StatusFields.class
+
+api/target/classes/ar/edu/itba/pod/utils/Pair.class
+
+api/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst

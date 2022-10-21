@@ -6,8 +6,8 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.config.GroupConfig;
 import com.hazelcast.core.HazelcastInstance;
-import entities.Reading;
-import entities.Sensor;
+import ar.edu.itba.pod.entities.Reading;
+import ar.edu.itba.pod.entities.Sensor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +17,11 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import static utils.FileUtils.getReadingsStream;
-import static utils.FileUtils.getSensorStream;
+import static ar.edu.itba.pod.utils.FileUtils.getReadingsStream;
+import static ar.edu.itba.pod.utils.FileUtils.getSensorStream;
 
 public class  Client {
 
@@ -28,7 +29,7 @@ public class  Client {
    private static final String CSV_DELIMITER = ";";
    private static final String ADDRESS_SEPARATOR = ";";
 
-   public static void main(String[] args) throws IOException {
+   public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
        logger.info("hz-config ar.edu.itba.pod.client.Client Starting ...");
 
        final Properties properties = System.getProperties();
@@ -84,7 +85,8 @@ public class  Client {
        HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
 
        final Stream<Sensor> sensorStream = getSensorStream(sensorFile.toPath(), CSV_DELIMITER);
-       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
+       //todo change limit
+       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(10000);
 
        switch(queryNumber){
            case 1:

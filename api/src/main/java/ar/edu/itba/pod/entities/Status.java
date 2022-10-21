@@ -1,4 +1,4 @@
-package entities;
+package ar.edu.itba.pod.entities;
 
 public enum Status {
     ACTIVE("A"),

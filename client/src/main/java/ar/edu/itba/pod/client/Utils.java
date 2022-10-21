@@ -1,10 +1,5 @@
 package ar.edu.itba.pod.client;
 
-import entities.Sensor;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;

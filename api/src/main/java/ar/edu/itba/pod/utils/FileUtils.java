@@ -1,8 +1,8 @@
-package utils;
+package ar.edu.itba.pod.utils;
 
-import entities.Reading;
-import entities.Sensor;
-import entities.Status;
+import ar.edu.itba.pod.entities.Reading;
+import ar.edu.itba.pod.entities.Sensor;
+import ar.edu.itba.pod.entities.Status;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
