@@ -64,7 +64,7 @@ public class  Client {
 
        String outPath;
        try {
-           outPath = Optional.ofNullable(properties.getProperty("inPath")).orElseThrow(IllegalArgumentException::new);
+           outPath = Optional.ofNullable(properties.getProperty("outPath")).orElseThrow(IllegalArgumentException::new);
        }catch(IllegalArgumentException e){
            logger.error("Invalid inPath");
            return;
@@ -86,7 +86,9 @@ public class  Client {
 
        final Stream<Sensor> sensorStream = getSensorStream(sensorFile.toPath(), CSV_DELIMITER);
        //todo change limit
-       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(10000);
+//       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(10000);
+       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
+
 
        switch(queryNumber){
            case 1:

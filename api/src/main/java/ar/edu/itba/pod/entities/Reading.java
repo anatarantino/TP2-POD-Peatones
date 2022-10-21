@@ -1,9 +1,12 @@
 package ar.edu.itba.pod.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Reading implements Serializable {
+    private int readingId;
     private int sensorId;
+    private String sensorName;
     private int year;
     private String month;
     private int day;
@@ -11,8 +14,10 @@ public class Reading implements Serializable {
     private int time;
     private int pedestrians;
 
-    public Reading(int sensorId, int year, String month, int day, String weekday, int time, int pedestrians) {
+    public Reading(int readingId, int sensorId, String sensorName, int year, String month, int day, String weekday, int time, int pedestrians) {
+        this.readingId = readingId;
         this.sensorId = sensorId;
+        this.sensorName = sensorName;
         this.year = year;
         this.month = month;
         this.day = day;
@@ -21,12 +26,28 @@ public class Reading implements Serializable {
         this.pedestrians = pedestrians;
     }
 
+    public int getReadingId() {
+        return readingId;
+    }
+
+    public void setReadingId(int readingId) {
+        this.readingId = readingId;
+    }
+
     public int getSensorId() {
         return sensorId;
     }
 
     public void setSensorId(int sensorId) {
         this.sensorId = sensorId;
+    }
+
+    public String getSensorName() {
+        return sensorName;
+    }
+
+    public void setSensorName(String sensorName) {
+        this.sensorName = sensorName;
     }
 
     public int getYear() {
@@ -84,24 +105,11 @@ public class Reading implements Serializable {
 
         Reading reading = (Reading) o;
 
-        if (sensorId != reading.sensorId) return false;
-        if (year != reading.year) return false;
-        if (day != reading.day) return false;
-        if (time != reading.time) return false;
-        if (pedestrians != reading.pedestrians) return false;
-        if (month != null ? !month.equals(reading.month) : reading.month != null) return false;
-        return weekday != null ? weekday.equals(reading.weekday) : reading.weekday == null;
+        return readingId == reading.readingId;
     }
 
     @Override
     public int hashCode() {
-        int result = sensorId;
-        result = 31 * result + year;
-        result = 31 * result + (month != null ? month.hashCode() : 0);
-        result = 31 * result + day;
-        result = 31 * result + (weekday != null ? weekday.hashCode() : 0);
-        result = 31 * result + time;
-        result = 31 * result + pedestrians;
-        return result;
+        return Objects.hash(readingId);
     }
 }

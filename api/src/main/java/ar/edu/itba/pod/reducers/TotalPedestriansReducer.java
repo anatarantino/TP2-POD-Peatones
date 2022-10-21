@@ -3,28 +3,28 @@ package ar.edu.itba.pod.reducers;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
-public class TotalReadingsReducer implements ReducerFactory<Integer,Integer,Long> {
+public class TotalPedestriansReducer implements ReducerFactory<String,Integer,Long> {
     @Override
-    public Reducer<Integer, Long> newReducer(Integer sensorId) {
+    public Reducer<Integer, Long> newReducer(String sensorName) {
         return new TotalReadingReducer();
     }
 
     private static class TotalReadingReducer extends Reducer<Integer, Long> {
-        private Long totalReadings;
+        private Long totalPedestrians;
 
         @Override
         public void beginReduce() {
-            totalReadings = 0L;
+            totalPedestrians = 0L;
         }
 
         @Override
         public void reduce(Integer count) {
-            totalReadings += count;
+            totalPedestrians += count;
         }
 
         @Override
         public Long finalizeReduce() {
-            return totalReadings;
+            return totalPedestrians;
         }
     }
 }

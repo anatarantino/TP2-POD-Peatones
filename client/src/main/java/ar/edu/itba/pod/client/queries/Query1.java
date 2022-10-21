@@ -1,9 +1,9 @@
 package ar.edu.itba.pod.client.queries;
 
-import ar.edu.itba.pod.collators.TotalReadingsCollator;
-import ar.edu.itba.pod.mappers.TotalReadingsMapper;
+import ar.edu.itba.pod.collators.TotalPedestriansCollator;
+import ar.edu.itba.pod.mappers.TotalPedestriansMapper;
 import ar.edu.itba.pod.predicates.SensorCountPredicate;
-import ar.edu.itba.pod.reducers.TotalReadingsReducer;
+import ar.edu.itba.pod.reducers.TotalPedestriansReducer;
 import ar.edu.itba.pod.utils.Pair;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
@@ -14,7 +14,6 @@ import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
-import com.hazelcast.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +21,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Collection;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
@@ -47,9 +45,9 @@ public class Query1 {
 
     public static void run(final HazelcastInstance hazelcastInstance, final Stream<Reading> readingStream, final Stream<Sensor> sensorStream, final File outFile) throws FileNotFoundException, InterruptedException, ExecutionException{
         final JobTracker jobTracker = hazelcastInstance.getJobTracker(QUERY_NAME);
-        final MultiMap<Integer, Reading> readingsMap = hazelcastInstance.getMultiMap("readings");
+        final MultiMap<String, Reading> readingsMap = hazelcastInstance.getMultiMap("readings");
         readingsMap.clear();
-        final ISet<Integer> sensorsSet = hazelcastInstance.getSet("sensors");
+        final ISet<String> sensorsSet = hazelcastInstance.getSet("sensors");
         sensorsSet.clear();
         logger.info("pre csv");
 
@@ -59,16 +57,20 @@ public class Query1 {
         logger.info("sensors:" + sensorsSet.size());
         logger.info("readings: " + readingsMap.size());
 
-        final KeyValueSource<Integer,Reading> source = KeyValueSource.fromMultiMap(readingsMap);
-        final Job<Integer, Reading> job = jobTracker.newJob(source);
-        ICompletableFuture<Collection<Pair<Integer,Long>>> future = job.keyPredicate(new SensorCountPredicate<>(hazelcastInstance.getSet("sensors")))
-                .mapper(new TotalReadingsMapper())
-                .reducer(new TotalReadingsReducer())
-                .submit(new TotalReadingsCollator());
+        final KeyValueSource<String,Reading> source = KeyValueSource.fromMultiMap(readingsMap);
+
+        final Job<String, Reading> job = jobTracker.newJob(source);
+        ICompletableFuture<Collection<Pair<String,Long>>> future = job
+                .keyPredicate(new SensorCountPredicate<>("sensors"))
+                .mapper(new TotalPedestriansMapper())
+                .reducer(new TotalPedestriansReducer())
+                .submit(new TotalPedestriansCollator());
+
 
         try(PrintWriter printWriter = new PrintWriter(outFile)){
             printWriter.println(CSV_HEADER);
-            future.get().forEach(f -> printWriter.println("hola"));
+            future.get().forEach(p -> printWriter.println(p.getKey() + ";" + p.getValue()));
+
         }
 
     }

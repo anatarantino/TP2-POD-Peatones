@@ -1,19 +1,27 @@
 package ar.edu.itba.pod.predicates;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.HazelcastInstanceAware;
 import com.hazelcast.mapreduce.KeyPredicate;
-import com.hazelcast.query.Predicates;
 
 import java.util.Collection;
 
-public class SensorCountPredicate<Sensor> implements KeyPredicate<Sensor> {
-    private Collection<Sensor> collection;
+public class SensorCountPredicate<K> implements KeyPredicate<K>, HazelcastInstanceAware {
+    private final String colName;
+    private transient Collection<K> collection;
 
-    public SensorCountPredicate(Collection<Sensor> collection) {
-        this.collection = collection;
+    public SensorCountPredicate(String colName) {
+        this.colName = colName;
     }
 
     @Override
-    public boolean evaluate(Sensor sensor) {
-        return sensor != null && collection.contains(sensor);
+    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
+        this.collection = hazelcastInstance.getSet(colName);
+    }
+
+    @Override
+    public boolean evaluate(K k) {
+        System.out.println(collection.size());
+        return k != null && collection.contains(k);
     }
 }
