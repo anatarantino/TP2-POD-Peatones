@@ -1,6 +1,7 @@
 package ar.edu.itba.pod.client;
 
 import ar.edu.itba.pod.client.queries.Query1;
+import ar.edu.itba.pod.client.queries.Query2;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
@@ -86,8 +87,8 @@ public class  Client {
 
        final Stream<Sensor> sensorStream = getSensorStream(sensorFile.toPath(), CSV_DELIMITER);
        //todo change limit
-//       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(10000);
-       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
+       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(10000);
+//       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
 
 
        switch(queryNumber){
@@ -95,6 +96,7 @@ public class  Client {
                Query1.run(hazelcastInstance, readingStream,sensorStream, outQueryFile);
                break;
            case 2:
+               Query2.run(hazelcastInstance, readingStream, sensorStream, outQueryFile);
                break;
            case 3:
                long min;
