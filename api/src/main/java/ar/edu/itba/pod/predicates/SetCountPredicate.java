@@ -6,11 +6,11 @@ import com.hazelcast.mapreduce.KeyPredicate;
 
 import java.util.Collection;
 
-public class SensorCountPredicate<K> implements KeyPredicate<K>, HazelcastInstanceAware {
+public class SetCountPredicate<K> implements KeyPredicate<K>, HazelcastInstanceAware {
     private final String colName;
     private transient Collection<K> collection;
 
-    public SensorCountPredicate(String colName) {
+    public SetCountPredicate(String colName) {
         this.colName = colName;
     }
 

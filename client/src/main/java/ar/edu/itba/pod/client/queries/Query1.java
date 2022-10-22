@@ -2,7 +2,7 @@ package ar.edu.itba.pod.client.queries;
 
 import ar.edu.itba.pod.collators.TotalPedestriansCollator;
 import ar.edu.itba.pod.mappers.TotalPedestriansMapper;
-import ar.edu.itba.pod.predicates.SensorCountPredicate;
+import ar.edu.itba.pod.predicates.SetCountPredicate;
 import ar.edu.itba.pod.reducers.TotalPedestriansReducer;
 import ar.edu.itba.pod.utils.Pair;
 import com.hazelcast.core.HazelcastInstance;
@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import static ar.edu.itba.pod.client.queries.QueryUtils.loadCsv;
 
 /*
 Donde cada línea de la salida contenga, separados por “;” el nombre del sensor y la cantidad total de peatones registrados por el sensor.
@@ -61,7 +60,7 @@ public class Query1 {
 
         final Job<String, Reading> job = jobTracker.newJob(source);
         ICompletableFuture<Collection<Pair<String,Long>>> future = job
-                .keyPredicate(new SensorCountPredicate<>("sensors"))
+                .keyPredicate(new SetCountPredicate<>("sensors"))
                 .mapper(new TotalPedestriansMapper())
                 .reducer(new TotalPedestriansReducer())
                 .submit(new TotalPedestriansCollator());
@@ -73,5 +72,10 @@ public class Query1 {
 
         }
 
+    }
+
+    public static void loadCsv(final Stream<Sensor> sensorStream, final Stream<Reading> readingStream, ISet<String> sensorsSet, MultiMap<String, Reading> readingsMap){
+        sensorStream.forEach(sensor -> sensorsSet.add(sensor.getDescription()));
+        readingStream.forEach(reading -> readingsMap.put(reading.getSensorName(), reading));
     }
 }

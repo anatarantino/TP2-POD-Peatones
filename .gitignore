@@ -204,3 +204,19 @@ api/target/classes/ar/edu/itba/pod/reducers/TotalPedestriansReducer$TotalReading
 api/target/classes/ar/edu/itba/pod/utils/FileUtils$SensorFields.class
 
 client/target/classes/ar/edu/itba/pod/client/queries/Query2.class
+
+client/src/main/resources/outFiles/query2.csv
+
+api/target/classes/ar/edu/itba/pod/collators/YearsCollator.class
+
+api/target/classes/ar/edu/itba/pod/mappers/YearsMapper.class
+
+api/target/classes/ar/edu/itba/pod/predicates/ReadingCountPredicate.class
+
+api/target/classes/ar/edu/itba/pod/predicates/SetCountPredicate.class
+
+api/target/classes/ar/edu/itba/pod/reducers/YearsReducer.class
+
+api/target/classes/ar/edu/itba/pod/reducers/YearsReducer$1.class
+
+api/target/classes/ar/edu/itba/pod/reducers/YearsReducer$YearsDataReducer.class
