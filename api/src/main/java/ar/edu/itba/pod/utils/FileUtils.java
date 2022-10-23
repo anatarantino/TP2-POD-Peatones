@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -24,7 +27,17 @@ public class FileUtils {
         return Files.lines(path, StandardCharsets.UTF_8)
                 .skip(1)
                 .map(line -> Arrays.asList(line.split(delimiter)))
-                .map(lines -> new Reading(Integer.parseInt(lines.get(ReadingsFields.READING_ID.value)),Integer.parseInt(lines.get(ReadingsFields.SENSOR_ID.value)), lines.get(ReadingsFields.SENSOR_NAME.value), Integer.parseInt(lines.get(ReadingsFields.YEAR.value)), lines.get(ReadingsFields.MONTH.value), Integer.parseInt(lines.get(ReadingsFields.DAY.value)), lines.get(ReadingsFields.WEEKDAY.value), Integer.parseInt(lines.get(ReadingsFields.TIME.value)), Integer.parseInt(lines.get(ReadingsFields.PEDESTRIANS.value))));
+                .map(lines -> new Reading(
+                        Integer.parseInt(lines.get(ReadingsFields.READING_ID.value)),
+                        Integer.parseInt(lines.get(ReadingsFields.SENSOR_ID.value)),
+                        LocalDateTime.parse(lines.get(ReadingsFields.LOCAL_DATE_TIME.value), DateTimeFormatter.ofPattern("MMMM d, y hh:mm:ss a")),
+                        lines.get(ReadingsFields.SENSOR_NAME.value),
+                        Integer.parseInt(lines.get(ReadingsFields.YEAR.value)),
+                        lines.get(ReadingsFields.MONTH.value),
+                        Integer.parseInt(lines.get(ReadingsFields.DAY.value)),
+                        lines.get(ReadingsFields.WEEKDAY.value),
+                        Integer.parseInt(lines.get(ReadingsFields.TIME.value)),
+                        Integer.parseInt(lines.get(ReadingsFields.PEDESTRIANS.value))));
     }
 
 
@@ -48,6 +61,7 @@ public class FileUtils {
     public enum ReadingsFields {
         READING_ID(0),
         SENSOR_ID(7),
+        LOCAL_DATE_TIME(1),
         SENSOR_NAME(8),
         YEAR(2),
         MONTH(3),

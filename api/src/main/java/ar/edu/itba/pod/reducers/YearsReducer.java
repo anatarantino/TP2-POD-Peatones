@@ -7,15 +7,15 @@ import com.hazelcast.mapreduce.ReducerFactory;
 import java.util.List;
 
 
-public class YearsReducer implements ReducerFactory<Integer, Pair<Boolean,Integer>, Long[]> {
+public class YearsReducer implements ReducerFactory<Integer, Pair<Boolean,Integer>, String> {
     private static final Boolean IS_WEEKDAY = Boolean.TRUE;
 
     @Override
-    public Reducer<Pair<Boolean, Integer>, Long[]> newReducer(Integer integer) {
+    public Reducer<Pair<Boolean, Integer>, String> newReducer(Integer integer) {
         return new YearsDataReducer();
     }
 
-    private static class YearsDataReducer extends Reducer<Pair<Boolean,Integer>,Long[]> {
+    private static class YearsDataReducer extends Reducer<Pair<Boolean,Integer>,String> {
         private Long totalWeekdays, totalWeekends,totalCount;
 
         @Override
@@ -37,12 +37,8 @@ public class YearsReducer implements ReducerFactory<Integer, Pair<Boolean,Intege
         }
 
         @Override
-        public Long[] finalizeReduce() {
-            Long[] result = new Long[3];
-            result[0] = totalWeekdays;
-            result[1] = totalWeekends;
-            result[2] = totalCount;
-            return result;
+        public String finalizeReduce() {
+            return totalWeekdays + ";" + totalWeekends + ";" + totalCount;
         }
     }
 }

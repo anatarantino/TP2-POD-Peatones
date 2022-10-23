@@ -1,22 +1,25 @@
 package ar.edu.itba.pod.entities;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Reading implements Serializable {
     private int readingId;
+    private final LocalDateTime localDate;
     private int sensorId;
-    private String sensorName;
-    private int year;
+    private final String sensorName;
+    private final int year;
     private String month;
     private int day;
-    private String weekday;
+    private final String weekday;
     private int time;
-    private int pedestrians;
+    private final int pedestrians;
 
-    public Reading(int readingId, int sensorId, String sensorName, int year, String month, int day, String weekday, int time, int pedestrians) {
+    public Reading(int readingId, int sensorId, LocalDateTime localDate, String sensorName, int year, String month, int day, String weekday, int time, int pedestrians) {
         this.readingId = readingId;
         this.sensorId = sensorId;
+        this.localDate = localDate;
         this.sensorName = sensorName;
         this.year = year;
         this.month = month;
@@ -42,60 +45,24 @@ public class Reading implements Serializable {
         this.sensorId = sensorId;
     }
 
-    public String getSensorName() {
-        return sensorName;
+    public LocalDateTime getLocalDate(){
+        return localDate;
     }
 
-    public void setSensorName(String sensorName) {
-        this.sensorName = sensorName;
+    public String getSensorName() {
+        return sensorName;
     }
 
     public int getYear() {
         return year;
     }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public int getDay() {
-        return day;
-    }
-
-    public void setDay(int day) {
-        this.day = day;
-    }
-
     public String getWeekday() {
         return weekday;
     }
 
-    public void setWeekday(String weekday) {
-        this.weekday = weekday;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
     public int getPedestrians() {
         return pedestrians;
-    }
-
-    public void setPedestrians(int pedestrians) {
-        this.pedestrians = pedestrians;
     }
 
     @Override

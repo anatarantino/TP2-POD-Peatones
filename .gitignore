@@ -220,3 +220,21 @@ api/target/classes/ar/edu/itba/pod/reducers/YearsReducer.class
 api/target/classes/ar/edu/itba/pod/reducers/YearsReducer$1.class
 
 api/target/classes/ar/edu/itba/pod/reducers/YearsReducer$YearsDataReducer.class
+
+client/src/main/resources/outFiles/query3.csv
+
+client/target/classes/ar/edu/itba/pod/client/queries/Query3.class
+
+client/target/classes/outFiles/query2.csv
+
+client/target/classes/outFiles/query3.csv
+
+api/target/classes/ar/edu/itba/pod/collators/HighestDateCollator.class
+
+api/target/classes/ar/edu/itba/pod/mappers/HighestDateMapper.class
+
+api/target/classes/ar/edu/itba/pod/reducers/HighestDateReducer.class
+
+api/target/classes/ar/edu/itba/pod/reducers/HighestDateReducer$1.class
+
+api/target/classes/ar/edu/itba/pod/reducers/HighestDateReducer$HighestDateDataReducer.class

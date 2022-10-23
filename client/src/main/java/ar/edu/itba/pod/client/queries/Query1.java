@@ -48,13 +48,10 @@ public class Query1 {
         readingsMap.clear();
         final ISet<String> sensorsSet = hazelcastInstance.getSet("sensors");
         sensorsSet.clear();
-        logger.info("pre csv");
+        logger.info("Loading data...");
 
         loadCsv(sensorStream, readingStream, sensorsSet,readingsMap);
-        logger.info("despues csv");
-
-        logger.info("sensors:" + sensorsSet.size());
-        logger.info("readings: " + readingsMap.size());
+        logger.info("Data loading complete.");
 
         final KeyValueSource<String,Reading> source = KeyValueSource.fromMultiMap(readingsMap);
 

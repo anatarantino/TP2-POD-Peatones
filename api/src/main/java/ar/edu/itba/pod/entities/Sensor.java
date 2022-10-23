@@ -32,6 +32,10 @@ public class Sensor implements Serializable {
         return status;
     }
 
+    public boolean isActive(){
+        return status == Status.ACTIVE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -4,7 +4,6 @@ import ar.edu.itba.pod.collators.YearsCollator;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
 import ar.edu.itba.pod.mappers.YearsMapper;
-import ar.edu.itba.pod.predicates.ReadingCountPredicate;
 import ar.edu.itba.pod.predicates.SetCountPredicate;
 import ar.edu.itba.pod.reducers.YearsReducer;
 import ar.edu.itba.pod.utils.Pair;
@@ -40,22 +39,17 @@ public class Query2 {
     public static void run(final HazelcastInstance hazelcastInstance, final Stream<Reading> readingStream, final Stream<Sensor> sensorStream, final File outFile) throws FileNotFoundException, InterruptedException, ExecutionException {
         final JobTracker jobTracker = hazelcastInstance.getJobTracker(QUERY_NAME);
         final MultiMap<Integer, Reading> readingsMap = hazelcastInstance.getMultiMap("readings");
-        readingsMap.clear();
         final ISet<Integer> yearsSet = hazelcastInstance.getSet("years");
         yearsSet.clear();
-        logger.info("pre csv");
-
+        logger.info("Loading data...");
         loadCsv(readingStream, yearsSet,readingsMap);
-        logger.info("despues csv");
-
-        logger.info("years:" + yearsSet.size());
-        logger.info("readings: " + readingsMap.size());
+        logger.info("Data loading complete.");
 
         final KeyValueSource<Integer,Reading> source = KeyValueSource.fromMultiMap(readingsMap);
 
         final Job<Integer, Reading> job = jobTracker.newJob(source);
 
-        ICompletableFuture<Collection<Pair<Integer,String>>> future = job
+        ICompletableFuture<Collection<String>> future = job
                 .keyPredicate(new SetCountPredicate<>("years"))
                 .mapper(new YearsMapper())
                 .reducer(new YearsReducer())
@@ -63,7 +57,7 @@ public class Query2 {
 
         try(PrintWriter printWriter = new PrintWriter(outFile)){
             printWriter.println(CSV_HEADER);
-            future.get().forEach(p -> printWriter.println(p.getKey() + ";" + p.getValue()));
+            future.get().forEach(printWriter::println);
         }
     }
 

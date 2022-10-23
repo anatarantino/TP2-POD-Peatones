@@ -2,6 +2,7 @@ package ar.edu.itba.pod.client;
 
 import ar.edu.itba.pod.client.queries.Query1;
 import ar.edu.itba.pod.client.queries.Query2;
+import ar.edu.itba.pod.client.queries.Query3;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
@@ -99,9 +100,10 @@ public class  Client {
                Query2.run(hazelcastInstance, readingStream, sensorStream, outQueryFile);
                break;
            case 3:
-               long min;
+               Integer min;
                try{
-                   min = Optional.of(Long.parseLong(properties.getProperty("min"))).orElseThrow(IllegalArgumentException::new);
+                   min = Optional.of(Integer.parseInt(properties.getProperty("min"))).orElseThrow(IllegalArgumentException::new);
+                   Query3.run(hazelcastInstance, readingStream, sensorStream, outQueryFile,min);
                }catch(IllegalArgumentException e){
                    logger.error("Invalid minimum pedestrians value");
                }
@@ -125,12 +127,6 @@ public class  Client {
            case 5:
                break;
        }
-
-       
-
-
-
-
 
        // Shutdown
        HazelcastClient.shutdownAll();
