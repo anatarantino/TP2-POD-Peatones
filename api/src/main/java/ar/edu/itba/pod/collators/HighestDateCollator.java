@@ -30,7 +30,7 @@ public class HighestDateCollator implements Collator<Map.Entry<String, Pair<Inte
                             return o1.getValue().getValue().compareTo(o2.getValue().getValue());
                         }
                 ).map((o) -> {
-                    String date = o.getValue().getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm"));
+                    String date = o.getValue().getValue().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
                     return o.getKey() + ";" + o.getValue().getKey() + ";" + date;
                 }).collect(Collectors.toList());
     }

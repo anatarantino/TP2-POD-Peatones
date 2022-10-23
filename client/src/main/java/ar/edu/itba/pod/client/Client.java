@@ -1,8 +1,6 @@
 package ar.edu.itba.pod.client;
 
-import ar.edu.itba.pod.client.queries.Query1;
-import ar.edu.itba.pod.client.queries.Query2;
-import ar.edu.itba.pod.client.queries.Query3;
+import ar.edu.itba.pod.client.queries.*;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
@@ -88,7 +86,7 @@ public class  Client {
 
        final Stream<Sensor> sensorStream = getSensorStream(sensorFile.toPath(), CSV_DELIMITER);
        //todo change limit
-       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(10000);
+       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(1000000);
 //       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
 
 
@@ -109,22 +107,22 @@ public class  Client {
                }
                break;
            case 4:
-               int n;
-               int year;
-
+               Integer n = -1;
+               Integer year = -1;
                try{
                    n = Optional.of(Integer.parseInt(properties.getProperty("n"))).orElseThrow(IllegalArgumentException::new);
+                   try{
+                       year = Optional.of(Integer.parseInt(properties.getProperty("year"))).orElseThrow(IllegalArgumentException::new);
+                   }catch(IllegalArgumentException e){
+                       logger.error("Invalid year");
+                   }
+                   Query4.run(hazelcastInstance, readingStream, sensorStream, outQueryFile,year,n);
                }catch(IllegalArgumentException e){
                    logger.error("Invalid top sensors value");
                }
-
-               try{
-                   year = Optional.of(Integer.parseInt(properties.getProperty("year"))).orElseThrow(IllegalArgumentException::new);
-               }catch(IllegalArgumentException e){
-                   logger.error("Invalid year");
-               }
                break;
            case 5:
+               Query5.run(hazelcastInstance, readingStream, sensorStream, outQueryFile);
                break;
        }
 

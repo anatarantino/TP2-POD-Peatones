@@ -19,7 +19,6 @@ import ar.edu.itba.pod.entities.Sensor;
 import ar.edu.itba.pod.mappers.HighestDateMapper;
 import ar.edu.itba.pod.predicates.SetCountPredicate;
 import ar.edu.itba.pod.reducers.HighestDateReducer;
-import ar.edu.itba.pod.utils.Pair;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.ISet;
