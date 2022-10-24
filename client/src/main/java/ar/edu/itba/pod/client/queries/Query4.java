@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.client.queries;
 
+import ar.edu.itba.pod.client.PerformanceResults;
 import ar.edu.itba.pod.collators.AvgCountCollator;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
@@ -47,21 +49,24 @@ public class Query4 {
     private static final String CSV_HEADER = "Sensor;Month;Max_Monthly_Avg";
     private static final Logger logger = LoggerFactory.getLogger(Query4.class);
 
-    public static void run(final HazelcastInstance hazelcastInstance,
-                           final Stream<Reading> readingStream,
-                           final Stream<Sensor> sensorStream,
-                           final File outFile, Integer year, Integer n) throws ExecutionException,InterruptedException, FileNotFoundException {
+    public static PerformanceResults run(final HazelcastInstance hazelcastInstance,
+                                         final Stream<Reading> readingStream,
+                                         final Stream<Sensor> sensorStream,
+                                         final File outFile, Integer year, Integer n) throws ExecutionException,InterruptedException, FileNotFoundException {
         final JobTracker jobTracker = hazelcastInstance.getJobTracker(QUERY_NAME);
         final MultiMap<String,Reading> readingsMap = hazelcastInstance.getMultiMap("readings");
         readingsMap.clear();
         final ISet<String> sensorsSet = hazelcastInstance.getSet("sensors");
         sensorsSet.clear();
         logger.info("Loading data...");
-        loadCsv(sensorStream, readingStream, sensorsSet,readingsMap, year);
+        final PerformanceResults performanceResults = new PerformanceResults();
+        loadCsv(sensorStream, readingStream, sensorsSet,readingsMap, year, performanceResults);
         logger.info("Data loading complete.");
 
         final KeyValueSource<String,Reading> source = KeyValueSource.fromMultiMap(readingsMap);
         final Job<String,Reading> job = jobTracker.newJob(source);
+
+        performanceResults.setMapReduceBegin(LocalDateTime.now());
 
         ICompletableFuture<Collection<String>> future = job
                 .keyPredicate(new SetCountPredicate<>("sensors"))
@@ -73,10 +78,12 @@ public class Query4 {
             printWriter.println(CSV_HEADER);
             future.get().forEach(printWriter::println);
         }
-
+        performanceResults.setMapReduceEnd(LocalDateTime.now());
+        return performanceResults;
     }
 
-    public static void loadCsv(final Stream<Sensor> sensorStream, final Stream<Reading> readingStream, ISet<String> sensorsSet, MultiMap<String, Reading> readingsMap, Integer year){
+    public static void loadCsv(final Stream<Sensor> sensorStream, final Stream<Reading> readingStream, ISet<String> sensorsSet, MultiMap<String, Reading> readingsMap, Integer year, PerformanceResults performanceResults){
+        performanceResults.setReadingFileBegin(LocalDateTime.now());
         sensorStream.forEach(sensor -> {
             if(sensor.isActive()){
                 sensorsSet.add(sensor.getDescription());
@@ -87,6 +94,7 @@ public class Query4 {
                 readingsMap.put(reading.getSensorName(), reading);
             }
         });
+        performanceResults.setReadingFileEnd(LocalDateTime.now());
     }
 
 }

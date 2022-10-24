@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.client.queries;
 
+import ar.edu.itba.pod.client.PerformanceResults;
 import ar.edu.itba.pod.collators.YearsCollator;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
@@ -36,18 +38,22 @@ public class Query2 {
     private static final String CSV_HEADER = "Year;Weekdays_Count;Weekends_Count;Total_Count";
     private static final Logger logger = LoggerFactory.getLogger(Query2.class);
 
-    public static void run(final HazelcastInstance hazelcastInstance, final Stream<Reading> readingStream, final Stream<Sensor> sensorStream, final File outFile) throws FileNotFoundException, InterruptedException, ExecutionException {
+    public static PerformanceResults run(final HazelcastInstance hazelcastInstance, final Stream<Reading> readingStream, final Stream<Sensor> sensorStream, final File outFile) throws FileNotFoundException, InterruptedException, ExecutionException {
         final JobTracker jobTracker = hazelcastInstance.getJobTracker(QUERY_NAME);
         final MultiMap<Integer, Reading> readingsMap = hazelcastInstance.getMultiMap("readings");
         final ISet<Integer> yearsSet = hazelcastInstance.getSet("years");
         yearsSet.clear();
         logger.info("Loading data...");
-        loadCsv(readingStream, yearsSet,readingsMap);
+
+        final PerformanceResults performanceResults = new PerformanceResults();
+        loadCsv(readingStream, yearsSet,readingsMap, performanceResults);
         logger.info("Data loading complete.");
 
         final KeyValueSource<Integer,Reading> source = KeyValueSource.fromMultiMap(readingsMap);
 
         final Job<Integer, Reading> job = jobTracker.newJob(source);
+
+        performanceResults.setMapReduceBegin(LocalDateTime.now());
 
         ICompletableFuture<Collection<String>> future = job
                 .keyPredicate(new SetCountPredicate<>("years"))
@@ -59,13 +65,19 @@ public class Query2 {
             printWriter.println(CSV_HEADER);
             future.get().forEach(printWriter::println);
         }
+        performanceResults.setMapReduceEnd(LocalDateTime.now());
+        return performanceResults;
+
     }
 
-    public static void loadCsv(final Stream<Reading> readingStream, ISet<Integer> yearsSet, MultiMap<Integer, Reading> readingsMap){
+    public static void loadCsv(final Stream<Reading> readingStream, ISet<Integer> yearsSet, MultiMap<Integer, Reading> readingsMap, PerformanceResults performanceResults){
+        performanceResults.setReadingFileBegin(LocalDateTime.now());
         readingStream.forEach(reading -> {
             readingsMap.put(reading.getYear(), reading);
             yearsSet.add(reading.getYear());
         });
+        performanceResults.setReadingFileEnd(LocalDateTime.now());
+
     }
 
 }

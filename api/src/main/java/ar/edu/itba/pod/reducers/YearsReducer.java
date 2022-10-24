@@ -4,18 +4,19 @@ import ar.edu.itba.pod.utils.Pair;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
-public class YearsReducer implements ReducerFactory<Integer, Pair<Boolean,Integer>, String> {
+public class YearsReducer implements ReducerFactory<Integer, Pair<Boolean,Integer>, List<Long>> {
     private static final Boolean IS_WEEKDAY = Boolean.TRUE;
 
     @Override
-    public Reducer<Pair<Boolean, Integer>, String> newReducer(Integer integer) {
+    public Reducer<Pair<Boolean, Integer>, List<Long>> newReducer(Integer integer) {
         return new YearsDataReducer();
     }
 
-    private static class YearsDataReducer extends Reducer<Pair<Boolean,Integer>,String> {
+    private static class YearsDataReducer extends Reducer<Pair<Boolean,Integer>,List<Long>> {
         private Long totalWeekdays, totalWeekends,totalCount;
 
         @Override
@@ -37,8 +38,12 @@ public class YearsReducer implements ReducerFactory<Integer, Pair<Boolean,Intege
         }
 
         @Override
-        public String finalizeReduce() {
-            return totalWeekdays + ";" + totalWeekends + ";" + totalCount;
+        public List<Long> finalizeReduce() {
+            List<Long> ret = new LinkedList<>();
+            ret.add(totalWeekdays);
+            ret.add(totalWeekends);
+            ret.add(totalCount);
+            return ret;
         }
     }
 }

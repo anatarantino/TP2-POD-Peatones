@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
@@ -86,22 +87,22 @@ public class  Client {
 
        final Stream<Sensor> sensorStream = getSensorStream(sensorFile.toPath(), CSV_DELIMITER);
        //todo change limit
-       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(1000000);
-//       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
+//       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(100000);
+       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
 
-
+        PerformanceResults performanceResults = null;
        switch(queryNumber){
            case 1:
-               Query1.run(hazelcastInstance, readingStream,sensorStream, outQueryFile);
+               performanceResults = Query1.run(hazelcastInstance, readingStream,sensorStream, outQueryFile);
                break;
            case 2:
-               Query2.run(hazelcastInstance, readingStream, sensorStream, outQueryFile);
+               performanceResults = Query2.run(hazelcastInstance, readingStream, sensorStream, outQueryFile);
                break;
            case 3:
                Integer min;
                try{
                    min = Optional.of(Integer.parseInt(properties.getProperty("min"))).orElseThrow(IllegalArgumentException::new);
-                   Query3.run(hazelcastInstance, readingStream, sensorStream, outQueryFile,min);
+                   performanceResults = Query3.run(hazelcastInstance, readingStream, sensorStream, outQueryFile,min);
                }catch(IllegalArgumentException e){
                    logger.error("Invalid minimum pedestrians value");
                }
@@ -116,15 +117,22 @@ public class  Client {
                    }catch(IllegalArgumentException e){
                        logger.error("Invalid year");
                    }
-                   Query4.run(hazelcastInstance, readingStream, sensorStream, outQueryFile,year,n);
+                   performanceResults = Query4.run(hazelcastInstance, readingStream, sensorStream, outQueryFile,year,n);
                }catch(IllegalArgumentException e){
                    logger.error("Invalid top sensors value");
                }
                break;
            case 5:
-               Query5.run(hazelcastInstance, readingStream, sensorStream, outQueryFile);
+               performanceResults = Query5.run(hazelcastInstance, readingStream, sensorStream, outQueryFile);
                break;
+           default:
+               throw new IllegalStateException();
        }
+       assert performanceResults != null;
+
+        try(PrintWriter pw = new PrintWriter(outTimeFile)){
+            performanceResults.exportResults(pw);
+        }
 
        // Shutdown
        HazelcastClient.shutdownAll();

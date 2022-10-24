@@ -266,3 +266,9 @@ api/target/classes/ar/edu/itba/pod/reducers/TotalMillionsPerSensorReducer.class
 api/target/classes/ar/edu/itba/pod/reducers/TotalMillionsPerSensorReducer$1.class
 
 api/target/classes/ar/edu/itba/pod/reducers/TotalMillionsPerSensorReducer$TotalMillionsData.class
+
+client/src/main/resources/outFiles/time1.txt
+
+client/target/classes/ar/edu/itba/pod/client/PerformanceResults.class
+
+client/target/classes/outFiles/time1.txt

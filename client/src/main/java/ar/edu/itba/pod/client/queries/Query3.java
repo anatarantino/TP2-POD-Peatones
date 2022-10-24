@@ -13,6 +13,7 @@ Birrarung Marr;10389;12/11/2019 12:00
 Bourke St Bridge;10389;16/11/2019 18:00
  */
 
+import ar.edu.itba.pod.client.PerformanceResults;
 import ar.edu.itba.pod.collators.HighestDateCollator;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
@@ -32,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
@@ -41,19 +43,22 @@ public class Query3 {
     private static final String CSV_HEADER = "Sensor;Max_Reading_Count;Max_Reading_DateTime";
     private static final Logger logger = LoggerFactory.getLogger(Query3.class);
 
-    public static void run(final HazelcastInstance hazelcastInstance, final Stream<Reading> readingStream, final Stream<Sensor> sensorStream, final File outFile, Integer min) throws ExecutionException,InterruptedException, FileNotFoundException {
+    public static PerformanceResults run(final HazelcastInstance hazelcastInstance, final Stream<Reading> readingStream, final Stream<Sensor> sensorStream, final File outFile, Integer min) throws ExecutionException,InterruptedException, FileNotFoundException {
         final JobTracker jobTracker = hazelcastInstance.getJobTracker(QUERY_NAME);
         final MultiMap<String, Reading> readingsMap = hazelcastInstance.getMultiMap("readings");
         readingsMap.clear();
         final ISet<String> sensorsSet = hazelcastInstance.getSet("sensors");
         sensorsSet.clear();
         logger.info("Loading data...");
-        loadCsv(sensorStream, readingStream, sensorsSet,readingsMap);
+        final PerformanceResults performanceResults = new PerformanceResults();
+        loadCsv(sensorStream, readingStream, sensorsSet,readingsMap, performanceResults);
         logger.info("Data loading complete.");
 
         final KeyValueSource<String,Reading> source = KeyValueSource.fromMultiMap(readingsMap);
 
         final Job<String,Reading> job = jobTracker.newJob(source);
+
+        performanceResults.setMapReduceBegin(LocalDateTime.now());
 
         ICompletableFuture<Collection<String>> future = job
                 .keyPredicate(new SetCountPredicate<>("sensors"))
@@ -66,9 +71,13 @@ public class Query3 {
             future.get().forEach(printWriter::println);
         }
 
+        performanceResults.setMapReduceEnd(LocalDateTime.now());
+        return performanceResults;
+
     }
 
-    public static void loadCsv(final Stream<Sensor> sensorStream, final Stream<Reading> readingStream, ISet<String> sensorsSet, MultiMap<String, Reading> readingsMap){
+    public static void loadCsv(final Stream<Sensor> sensorStream, final Stream<Reading> readingStream, ISet<String> sensorsSet, MultiMap<String, Reading> readingsMap, PerformanceResults performanceResults){
+        performanceResults.setReadingFileBegin(LocalDateTime.now());
         sensorStream.forEach(sensor -> {
             if(sensor.isActive()){
                 sensorsSet.add(sensor.getDescription());
@@ -79,5 +88,6 @@ public class Query3 {
                 readingsMap.put(reading.getSensorName(), reading);
             }
         });
+        performanceResults.setReadingFileEnd(LocalDateTime.now());
     }
 }
