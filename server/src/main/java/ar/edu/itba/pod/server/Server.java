@@ -40,6 +40,13 @@ public class Server {
                .setEnabled(true);
        config.setManagementCenterConfig(managementCenterConfig);
 
+       //change multimap value type to list instead of set
+       final MultiMapConfig multiMapConfig = new MultiMapConfig();
+       multiMapConfig.setName("default");
+       multiMapConfig.setValueCollectionType("LIST");
+
+       config.addMultiMapConfig(multiMapConfig);
+
        // Start cluster
        Hazelcast.newHazelcastInstance(config);
    }

@@ -73,15 +73,15 @@ public class  Client {
        final File outQueryFile = new File(outPath + "/query" + queryNumber + ".csv");
        final File outTimeFile = new File(outPath + "/time" + queryNumber + ".txt");
 
+       //Hazelcast configuration
        ClientConfig clientConfig = new ClientConfig();
 
        // Group Config
-       GroupConfig groupConfig = new GroupConfig().setName("g13").setPassword("g13-pass");
+       GroupConfig groupConfig = clientConfig.getGroupConfig().setName("g13").setPassword("g13-pass");
        clientConfig.setGroupConfig(groupConfig);
-       ClientNetworkConfig clientNetworkConfig = new ClientNetworkConfig();
-
-       clientNetworkConfig.setAddresses(serverAddresses);
-       clientConfig.setNetworkConfig(clientNetworkConfig);
+       ClientNetworkConfig clientNetworkConfig = clientConfig.getNetworkConfig();
+       serverAddresses.forEach(clientNetworkConfig::addAddress);
+       clientConfig.setProperty("hazelcast.logging.type","slf4j");
 
        HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
 
@@ -105,6 +105,7 @@ public class  Client {
                    performanceResults = Query3.run(hazelcastInstance, readingStream, sensorStream, outQueryFile,min);
                }catch(IllegalArgumentException e){
                    logger.error("Invalid minimum pedestrians value");
+                   return;
                }
                break;
            case 4:
@@ -116,10 +117,12 @@ public class  Client {
                        year = Optional.of(Integer.parseInt(properties.getProperty("year"))).orElseThrow(IllegalArgumentException::new);
                    }catch(IllegalArgumentException e){
                        logger.error("Invalid year");
+                       return;
                    }
                    performanceResults = Query4.run(hazelcastInstance, readingStream, sensorStream, outQueryFile,year,n);
                }catch(IllegalArgumentException e){
                    logger.error("Invalid top sensors value");
+                   return;
                }
                break;
            case 5:
@@ -128,7 +131,6 @@ public class  Client {
            default:
                throw new IllegalStateException();
        }
-       assert performanceResults != null;
 
         try(PrintWriter pw = new PrintWriter(outTimeFile)){
             performanceResults.exportResults(pw);
