@@ -40,6 +40,9 @@ public class Server {
                .setEnabled(true);
        config.setManagementCenterConfig(managementCenterConfig);
 
+       //config logger
+       config.setProperty("hazelcast.logging.type","slf4j");
+
        //change multimap value type to list instead of set
        final MultiMapConfig multiMapConfig = new MultiMapConfig();
        multiMapConfig.setName("default");
