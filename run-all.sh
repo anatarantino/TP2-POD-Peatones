@@ -1,6 +1,6 @@
 #!/bin/bash
-#TP_PATH=#complete#
-TP_PATH=/Users/martirodriguez/Documents/ITBA/POD/TP2-POD-Peatones
+
+TP_PATH=#complete#
 
 cd $TP_PATH
 mvn install
