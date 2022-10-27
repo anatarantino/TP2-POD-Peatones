@@ -16,14 +16,15 @@ public class Server {
 
        // Config
        Config config = new Config();
-       String address = "127.0.0.*";
+       String address = "*.*.*.*";
+
 
        // Group Config
        GroupConfig groupConfig = new GroupConfig().setName("g13").setPassword("g13-pass");
        config.setGroupConfig(groupConfig);
 
        // Network Config
-       MulticastConfig multicastConfig = new MulticastConfig();
+       MulticastConfig multicastConfig = new MulticastConfig().setEnabled(true);
 
        JoinConfig joinConfig = new JoinConfig().setMulticastConfig(multicastConfig);
 

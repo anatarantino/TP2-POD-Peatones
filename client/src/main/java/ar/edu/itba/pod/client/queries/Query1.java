@@ -2,8 +2,8 @@ package ar.edu.itba.pod.client.queries;
 
 import ar.edu.itba.pod.client.PerformanceResults;
 import ar.edu.itba.pod.collators.TotalPedestriansCollator;
+import ar.edu.itba.pod.combiners.TotalPedestriansCombiner;
 import ar.edu.itba.pod.mappers.TotalPedestriansMapper;
-import ar.edu.itba.pod.predicates.SetCountPredicate;
 import ar.edu.itba.pod.reducers.TotalPedestriansReducer;
 import ar.edu.itba.pod.utils.Pair;
 import com.hazelcast.core.HazelcastInstance;
@@ -62,8 +62,8 @@ public class Query1 {
 
         performanceResults.setMapReduceBegin(LocalDateTime.now());
         ICompletableFuture<Collection<Pair<String,Long>>> future = job
-                .keyPredicate(new SetCountPredicate<>("sensors"))
                 .mapper(new TotalPedestriansMapper())
+                .combiner(new TotalPedestriansCombiner())
                 .reducer(new TotalPedestriansReducer())
                 .submit(new TotalPedestriansCollator());
 

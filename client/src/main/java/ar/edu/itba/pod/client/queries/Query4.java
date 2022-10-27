@@ -5,7 +5,6 @@ import ar.edu.itba.pod.collators.AvgCountCollator;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
 import ar.edu.itba.pod.mappers.AvgCountMapper;
-import ar.edu.itba.pod.predicates.SetCountPredicate;
 import ar.edu.itba.pod.reducers.AvgCountReducer;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
@@ -69,7 +68,6 @@ public class Query4 {
         performanceResults.setMapReduceBegin(LocalDateTime.now());
 
         ICompletableFuture<Collection<String>> future = job
-                .keyPredicate(new SetCountPredicate<>("sensors"))
                 .mapper(new AvgCountMapper())
                 .reducer(new AvgCountReducer(year))
                 .submit(new AvgCountCollator(n));

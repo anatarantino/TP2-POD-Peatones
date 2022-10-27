@@ -29,6 +29,7 @@ public class  Client {
    private static final Logger logger = LoggerFactory.getLogger(Client.class);
    private static final String CSV_DELIMITER = ";";
    private static final String ADDRESS_SEPARATOR = ";";
+   private static final Integer LIMIT = 1000000;
 
    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
        logger.info("hz-config ar.edu.itba.pod.client.Client Starting ...");
@@ -87,8 +88,8 @@ public class  Client {
 
        final Stream<Sensor> sensorStream = getSensorStream(sensorFile.toPath(), CSV_DELIMITER);
        //todo change limit
-//       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(100000);
-       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
+       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(LIMIT);
+//       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
 
         PerformanceResults performanceResults = null;
        switch(queryNumber){

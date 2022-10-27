@@ -5,9 +5,7 @@ import ar.edu.itba.pod.collators.YearsCollator;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
 import ar.edu.itba.pod.mappers.YearsMapper;
-import ar.edu.itba.pod.predicates.SetCountPredicate;
 import ar.edu.itba.pod.reducers.YearsReducer;
-import ar.edu.itba.pod.utils.Pair;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.ISet;
@@ -56,7 +54,6 @@ public class Query2 {
         performanceResults.setMapReduceBegin(LocalDateTime.now());
 
         ICompletableFuture<Collection<String>> future = job
-                .keyPredicate(new SetCountPredicate<>("years"))
                 .mapper(new YearsMapper())
                 .reducer(new YearsReducer())
                 .submit(new YearsCollator());

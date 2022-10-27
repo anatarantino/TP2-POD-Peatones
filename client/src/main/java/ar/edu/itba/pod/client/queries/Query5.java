@@ -30,7 +30,6 @@ import ar.edu.itba.pod.collators.PairsByMillionsCollator;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
 import ar.edu.itba.pod.mappers.TotalPedestriansMapper;
-import ar.edu.itba.pod.predicates.SetCountPredicate;
 import ar.edu.itba.pod.reducers.TotalMillionsPerSensorReducer;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
@@ -76,7 +75,6 @@ public class Query5 {
 
         performanceResults.setMapReduceBegin(LocalDateTime.now());
         ICompletableFuture<Collection<String>> future = job
-                .keyPredicate(new SetCountPredicate<>("sensors"))
                 .mapper(new TotalPedestriansMapper())
                 .reducer(new TotalMillionsPerSensorReducer())
                 .submit(new PairsByMillionsCollator());

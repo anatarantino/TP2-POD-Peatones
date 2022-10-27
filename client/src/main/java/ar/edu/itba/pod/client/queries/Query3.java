@@ -18,7 +18,6 @@ import ar.edu.itba.pod.collators.HighestDateCollator;
 import ar.edu.itba.pod.entities.Reading;
 import ar.edu.itba.pod.entities.Sensor;
 import ar.edu.itba.pod.mappers.HighestDateMapper;
-import ar.edu.itba.pod.predicates.SetCountPredicate;
 import ar.edu.itba.pod.reducers.HighestDateReducer;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ICompletableFuture;
@@ -61,7 +60,6 @@ public class Query3 {
         performanceResults.setMapReduceBegin(LocalDateTime.now());
 
         ICompletableFuture<Collection<String>> future = job
-                .keyPredicate(new SetCountPredicate<>("sensors"))
                 .mapper(new HighestDateMapper())
                 .reducer(new HighestDateReducer())
                 .submit(new HighestDateCollator(min));

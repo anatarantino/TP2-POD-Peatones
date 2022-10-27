@@ -10,3 +10,4 @@ public class TotalPedestriansMapper implements Mapper<String, Reading, String, I
         context.emit(sensorName,reading.getPedestrians());
     }
 }
+
