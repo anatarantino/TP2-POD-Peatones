@@ -14,42 +14,25 @@ public class Server {
    public static void main(String[] args) {
        logger.info("hz-config ar.edu.itba.pod.server.Server Starting ...");
 
+       System.setProperty("java.net.preferIPv4Stack", "true");
        // Config
        Config config = new Config();
-       String address = "*.*.*.*";
-
 
        // Group Config
        GroupConfig groupConfig = new GroupConfig().setName("g13").setPassword("g13-pass");
        config.setGroupConfig(groupConfig);
 
        // Network Config
-       MulticastConfig multicastConfig = new MulticastConfig().setEnabled(true);
+       MulticastConfig multicastConfig = new MulticastConfig();
 
        JoinConfig joinConfig = new JoinConfig().setMulticastConfig(multicastConfig);
 
        InterfacesConfig interfacesConfig = new InterfacesConfig()
-               .setInterfaces(Collections.singletonList(address)).setEnabled(true);
+               .setInterfaces(Collections.singletonList("*.*.*.*")).setEnabled(true);
 
        NetworkConfig networkConfig = new NetworkConfig().setInterfaces(interfacesConfig).setJoin(joinConfig);
 
        config.setNetworkConfig(networkConfig);
-
-       // Management Center Config
-       ManagementCenterConfig managementCenterConfig = new ManagementCenterConfig()
-               .setUrl("http://localhost:32768/mancenter/")
-               .setEnabled(true);
-       config.setManagementCenterConfig(managementCenterConfig);
-
-       //config logger
-       config.setProperty("hazelcast.logging.type","slf4j");
-
-       //change multimap value type to list instead of set
-       final MultiMapConfig multiMapConfig = new MultiMapConfig();
-       multiMapConfig.setName("default");
-       multiMapConfig.setValueCollectionType("LIST");
-
-       config.addMultiMapConfig(multiMapConfig);
 
        // Start cluster
        Hazelcast.newHazelcastInstance(config);
