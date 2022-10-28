@@ -29,7 +29,6 @@ public class  Client {
    private static final Logger logger = LoggerFactory.getLogger(Client.class);
    private static final String CSV_DELIMITER = ";";
    private static final String ADDRESS_SEPARATOR = ";";
-   private static final Integer LIMIT = 1000000;
 
    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
        logger.info("hz-config ar.edu.itba.pod.client.Client Starting ...");
@@ -87,11 +86,9 @@ public class  Client {
        HazelcastInstance hazelcastInstance = HazelcastClient.newHazelcastClient(clientConfig);
 
        final Stream<Sensor> sensorStream = getSensorStream(sensorFile.toPath(), CSV_DELIMITER);
-       //todo change limit
-       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER).limit(LIMIT);
-//       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
+       final Stream<Reading> readingStream = getReadingsStream(readingsFile.toPath(), CSV_DELIMITER);
 
-        PerformanceResults performanceResults = null;
+        PerformanceResults performanceResults;
        switch(queryNumber){
            case 1:
                performanceResults = Query1.run(hazelcastInstance, readingStream,sensorStream, outQueryFile);
@@ -110,8 +107,8 @@ public class  Client {
                }
                break;
            case 4:
-               Integer n = -1;
-               Integer year = -1;
+               Integer n;
+               Integer year;
                try{
                    n = Optional.of(Integer.parseInt(properties.getProperty("n"))).orElseThrow(IllegalArgumentException::new);
                    try{
@@ -142,3 +139,4 @@ public class  Client {
    }
 
 }
+

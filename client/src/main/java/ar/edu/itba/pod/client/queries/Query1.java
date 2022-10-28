@@ -63,7 +63,7 @@ public class Query1 {
         performanceResults.setMapReduceBegin(LocalDateTime.now());
         ICompletableFuture<Collection<Pair<String,Long>>> future = job
                 .mapper(new TotalPedestriansMapper())
-                .combiner(new TotalPedestriansCombiner())
+//                .combiner(new TotalPedestriansCombiner())
                 .reducer(new TotalPedestriansReducer())
                 .submit(new TotalPedestriansCollator());
 
