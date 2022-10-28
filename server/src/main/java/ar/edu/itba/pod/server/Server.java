@@ -34,6 +34,15 @@ public class Server {
 
        config.setNetworkConfig(networkConfig);
 
+       //config logger
+       config.setProperty("hazelcast.logging.type","slf4j");
+
+       //change multimap value type to list instead of set
+       final MultiMapConfig multiMapConfig = new MultiMapConfig();
+       multiMapConfig.setName("default");
+       multiMapConfig.setValueCollectionType("LIST");
+
+       config.addMultiMapConfig(multiMapConfig);
        // Start cluster
        Hazelcast.newHazelcastInstance(config);
    }
